@@ -1,5 +1,4 @@
 # COMS-4153-Project-Chat-Microservice
-<<<<<<< HEAD
 
 ## Create new conversation
 
@@ -41,6 +40,3 @@ CREATE TABLE IF NOT EXISTS conversations (
     messages JSON DEFAULT NULL, 
     isGroup BOOLEAN NOT NULL DEFAULT FALSE
 );
-=======
-COMS-4153-Project-Chat-Microservice
->>>>>>> fd1ef48e5af47f4ab0de1b4ac7f119ea0461e666
