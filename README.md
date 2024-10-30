@@ -11,7 +11,7 @@ Send POST request to http://0.0.0.0:8000/conversations/ with JSON body
   "isGroup": true
 }
 
-# Update conversation details
+## Update conversation details
 
 Send PUT request to http://0.0.0.0:8000/conversations/{conversation_id} with JSON body
 
