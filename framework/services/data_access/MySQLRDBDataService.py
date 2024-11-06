@@ -78,6 +78,20 @@ class MySQLRDBDataService(DataDataService):
         finally:
             connection.close()
 
+    def fetch_all(self, database_name: str, table: str):
+        connection = self._get_connection()
+        try:
+            sql = f"SELECT * FROM {database_name}.{table}"
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                print(result)
+                return result
+        except Exception as e:
+            raise Exception(f"{str(e)}")
+        finally:
+            connection.close()
+
     def update(self, database_name: str, table: str, data: dict, key_field: str, key_value: str):
         """Update an existing record in the database based on a key field."""
         connection = self._get_connection()

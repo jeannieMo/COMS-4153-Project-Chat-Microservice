@@ -16,8 +16,8 @@ conversation_service = ConversationService()
              })
 def create_conversation(conversation: dict):
     try:
-        conversation_service.create_conversation(conversation)
-        return JSONResponse(content={"detail": "Conversation created successfully"}, status_code=201)
+        conversation_id = conversation_service.create_conversation(conversation)
+        return JSONResponse(content={"id": conversation_id, "detail": "Conversation created successfully"}, status_code=201)
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -52,6 +52,25 @@ def get_conversation(conversation_id: int):
         if not conversation:
             raise HTTPException(status_code=404, detail="Conversation not found")
         return JSONResponse(content={"detail": conversation}, status_code=200)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/conversations/",
+            tags=["conversations"],
+            responses={
+                200: {"description": "Conversation retrieved successfully"},
+                404: {"description": "Conversation not found"},
+                400: {"description": "Bad request - invalid parameters"}
+            })
+def get_all_conversations():
+    try:
+        conversations = conversation_service.get_all_conversations()
+        if not conversations:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+        return JSONResponse(content={"detail": conversations}, status_code=200)
     except HTTPException as e:
         raise e
     except Exception as e:

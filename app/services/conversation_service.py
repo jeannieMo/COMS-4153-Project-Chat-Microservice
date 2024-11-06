@@ -7,8 +7,8 @@ class ConversationService:
     def __init__(self):
         self.resource = ServiceFactory.get_service('ConversationResource')
 
-    def create_conversation(self, conversation_data: dict):
-        """Create a new conversation or update an existing one."""
+    def create_conversation(self, conversation_data: dict) -> int:
+        """Create a new conversation and return its ID."""
         try:
             formatted_conversation_data = {
                 "name": conversation_data["name"],
@@ -16,7 +16,14 @@ class ConversationService:
                 "messages": json.dumps(conversation_data["messages"]),  # Convert list of messages to JSON string
                 "isGroup": bool(conversation_data["isGroup"])
             }
-            self.resource.create_conversation(formatted_conversation_data)
+
+            # Assuming `self.resource.create_conversation` returns the ID of the created conversation
+            conversation_id = self.resource.create_conversation(formatted_conversation_data)
+
+            if not conversation_id:
+                raise Exception("Failed to retrieve conversation ID after creation.")
+
+            return conversation_id
 
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Error creating conversation: {str(e)}")
@@ -42,3 +49,9 @@ class ConversationService:
             raise HTTPException(status_code=404, detail=f"Conversation with ID {conversation_id} not found")
         return conversation
 
+    def get_all_conversations(self):
+        """Retrieve a conversation from the database."""
+        conversations = self.resource.get_all_conversations()
+        if not conversations:
+            raise HTTPException(status_code=404, detail=f"Conversations not found")
+        return conversations

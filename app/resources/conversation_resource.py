@@ -37,3 +37,11 @@ class ConversationResource:
             key_field="convo_id",
             key_value=conversation_id
         )
+
+    def get_all_conversations(self) -> list[dict]:
+        """Retrieve all conversations from the database."""
+        return self.data_service.fetch_all(
+            database_name="p1_database",
+            table="conversations"
+        )
+
