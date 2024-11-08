@@ -8,11 +8,12 @@ class ConversationResource:
     def create_conversation(self, conversation: dict) -> dict:
         """Create a new conversation."""
         try:
-            self.data_service.insert(
+            inserted_id = self.data_service.insert(
                 database_name="p1_database",
                 table="conversations",
                 data=conversation, 
             )
+            return {"convo_id": inserted_id}  # Return as a dictionary for consistency
         except Exception as e:
             raise Exception(f"{str(e)}")
     
@@ -38,10 +39,21 @@ class ConversationResource:
             key_value=conversation_id
         )
 
-    def get_all_conversations(self) -> list[dict]:
+    def get_all_conversations(self) -> List[dict]:
         """Retrieve all conversations from the database."""
         return self.data_service.fetch_all(
             database_name="p1_database",
             table="conversations"
         )
 
+    def delete_conversation(self, conversation_id: int) -> None:
+        """Delete a conversation from the database."""
+        try:
+            self.data_service.delete(
+                database_name="p1_database",
+                table="conversations",
+                key_field="convo_id",
+                key_value=conversation_id
+            )
+        except Exception as e:
+            raise Exception(f"Error deleting conversation: {str(e)}")

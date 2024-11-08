@@ -17,7 +17,7 @@ conversation_service = ConversationService()
 def create_conversation(conversation: dict):
     try:
         conversation_id = conversation_service.create_conversation(conversation)
-        return JSONResponse(content={"id": conversation_id, "detail": "Conversation created successfully"}, status_code=201)
+        return JSONResponse(content={"convo_id": conversation_id ["convo_id"], "detail": "Conversation created successfully"}, status_code=201)
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -71,6 +71,22 @@ def get_all_conversations():
         if not conversations:
             raise HTTPException(status_code=404, detail="Conversation not found")
         return JSONResponse(content={"detail": conversations}, status_code=200)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.delete("/conversations/{conversation_id}",
+               tags=["conversations"],
+               responses={
+                   200: {"description": "Conversation deleted successfully"},
+                   404: {"description": "Conversation not found"},
+                   400: {"description": "Bad request - invalid parameters"}
+               })
+def delete_conversation(conversation_id: int):
+    try:
+        conversation_service.delete_conversation(conversation_id)
+        return JSONResponse(content={"detail": "Conversation deleted successfully"}, status_code=200)
     except HTTPException as e:
         raise e
     except Exception as e:

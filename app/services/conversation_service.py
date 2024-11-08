@@ -55,3 +55,10 @@ class ConversationService:
         if not conversations:
             raise HTTPException(status_code=404, detail=f"Conversations not found")
         return conversations
+
+    def delete_conversation(self, conversation_id: int):
+        """Delete a conversation from the database."""
+        try:
+            self.resource.delete_conversation(conversation_id)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Error deleting conversation: {str(e)}")

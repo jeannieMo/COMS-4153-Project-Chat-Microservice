@@ -73,6 +73,8 @@ class MySQLRDBDataService(DataDataService):
             """
             with connection.cursor() as cursor:
                 cursor.execute(sql, tuple(data.values()))
+                inserted_id = cursor.lastrowid
+                return inserted_id
         except Exception as e:
             raise Exception (f"{str(e)}")
         finally:
@@ -116,9 +118,20 @@ class MySQLRDBDataService(DataDataService):
         finally:
             connection.close()
 
+    def delete(self, database_name: str, table: str, key_field: str, key_value: str):
+        """Delete a record from the specified table based on a key field."""
+        connection = self._get_connection()
+        try:
+            # Check if the record exists before attempting to delete
+            existing_record = self.fetch_one(database_name, table, key_field, key_value)
+            if not existing_record:
+                raise Exception(f"No record found with {key_field} = {key_value}")
 
+            sql = f"DELETE FROM {database_name}.{table} WHERE {key_field} = {key_value};"
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
 
-
-
-
-
+        except Exception as e:
+            raise Exception(f"{str(e)}")
+        finally:
+            connection.close()
