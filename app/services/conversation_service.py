@@ -62,3 +62,19 @@ class ConversationService:
             self.resource.delete_conversation(conversation_id)
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Error deleting conversation: {str(e)}")
+
+    def get_total_conversation_count(self) -> int:
+        """Get the total count of conversations."""
+        try:
+            total_count = self.resource.get_total_conversation_count()
+            return total_count
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error retrieving total conversation count: {str(e)}")
+
+    def get_paginated_conversations(self, page: int, limit: int):
+        """Get a paginated list of conversations."""
+        try:
+            conversations = self.resource.get_paginated_conversations(page, limit)
+            return conversations
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error retrieving paginated conversations: {str(e)}")

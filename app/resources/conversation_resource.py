@@ -46,6 +46,20 @@ class ConversationResource:
             table="conversations"
         )
 
+    def get_paginated_conversations(self, page: int, limit: int) -> List[dict]:
+        """Retrieve a paginated list of conversations from the database."""
+        try:
+            offset = (page - 1) * limit
+            conversations = self.data_service.fetch_paginated(
+                database_name="p1_database",
+                table="conversations",
+                offset=offset,
+                limit=limit
+            )
+            return conversations
+        except Exception as e:
+            raise Exception(f"{str(e)}")
+
     def delete_conversation(self, conversation_id: int) -> None:
         """Delete a conversation from the database."""
         try:
@@ -57,3 +71,14 @@ class ConversationResource:
             )
         except Exception as e:
             raise Exception(f"Error deleting conversation: {str(e)}")
+        
+    def get_total_conversation_count(self) -> int:
+        """Retrieve the total count of conversations from the database."""
+        try:
+            count = self.data_service.count_all(
+                database_name="p1_database",
+                table="conversations"
+            )
+            return count
+        except Exception as e:
+            raise Exception(f"Error retrieving total conversation count: {str(e)}")

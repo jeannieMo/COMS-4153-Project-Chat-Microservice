@@ -94,6 +94,20 @@ class MySQLRDBDataService(DataDataService):
         finally:
             connection.close()
 
+    def fetch_paginated(self, database_name: str, table: str, offset: int, limit: int):
+        """Fetch a paginated list of records from the specified table."""
+        connection = self._get_connection()
+        try:
+            sql = f"SELECT * FROM {database_name}.{table} LIMIT %s OFFSET %s"
+            with connection.cursor() as cursor:
+                cursor.execute(sql, (limit, offset))
+                result = cursor.fetchall()
+                return result
+        except Exception as e:
+            raise Exception(f"Error fetching paginated data: {str(e)}")
+        finally:
+            connection.close()
+
     def update(self, database_name: str, table: str, data: dict, key_field: str, key_value: str):
         """Update an existing record in the database based on a key field."""
         connection = self._get_connection()
@@ -133,5 +147,19 @@ class MySQLRDBDataService(DataDataService):
 
         except Exception as e:
             raise Exception(f"{str(e)}")
+        finally:
+            connection.close()
+
+    def count_all(self, database_name: str, table: str) -> int:
+        """Count all records in the specified table."""
+        connection = self._get_connection()
+        try:
+            sql = f"SELECT COUNT(*) AS total FROM {database_name}.{table}"
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                result = cursor.fetchone()
+                return result['total']  # Returning the total count
+        except Exception as e:
+            raise Exception(f"Error counting records in {table}: {str(e)}")
         finally:
             connection.close()

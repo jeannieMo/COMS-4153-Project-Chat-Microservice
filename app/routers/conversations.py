@@ -57,7 +57,6 @@ def get_conversation(conversation_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/conversations/",
             tags=["conversations"],
             responses={
@@ -65,12 +64,24 @@ def get_conversation(conversation_id: int):
                 404: {"description": "Conversation not found"},
                 400: {"description": "Bad request - invalid parameters"}
             })
-def get_all_conversations():
+def get_all_conversations(page: Optional[int] = Query(None, gt=0), limit: Optional[int] = Query(None, gt=0)):
     try:
-        conversations = conversation_service.get_all_conversations()
-        if not conversations:
-            raise HTTPException(status_code=404, detail="Conversation not found")
-        return JSONResponse(content={"detail": conversations}, status_code=200)
+        if page is not None and limit is not None:
+            # Fetch paginated conversations
+            total_conversations = conversation_service.get_total_conversation_count()
+            conversations = conversation_service.get_paginated_conversations(page, limit)
+            total_pages = (total_conversations + limit - 1) // limit  # Ceiling division
+            return JSONResponse(content={
+                "detail": conversations,
+                "total": total_conversations,
+                "page": page,
+                "limit": limit,
+                "total_pages": total_pages
+            }, status_code=200)
+        else:
+            # Fetch all conversations
+            conversations = conversation_service.get_all_conversations()
+            return JSONResponse(content={"detail": conversations}, status_code=200)
     except HTTPException as e:
         raise e
     except Exception as e:
