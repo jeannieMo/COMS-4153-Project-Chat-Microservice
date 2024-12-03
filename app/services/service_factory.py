@@ -1,11 +1,16 @@
 from framework.services.service_factory import BaseServiceFactory
 from app.resources.conversation_resource import ConversationResource
 from framework.services.data_access.MySQLRDBDataService import MySQLRDBDataService
+from dotenv import load_dotenv
 import os
+
 
 class ServiceFactory(BaseServiceFactory):
     def __init__(self):
         super().__init__()
+
+    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.env'))
+    load_dotenv(dotenv_path=env_path)
 
     @classmethod
     def get_service(cls, service_name):
