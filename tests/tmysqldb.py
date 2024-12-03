@@ -1,10 +1,14 @@
 from framework.services.data_access.MySQLRDBDataService import MySQLRDBDataService
 import json
-
+import os
 
 def get_db_service():
-    context = dict(user="root", password="dbuserdbuser",
-                   host="localhost", port=3306)
+    context = {
+        "host": os.getenv("DB_HOST"),
+        "port": int(os.getenv("DB_PORT")),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    }
     data_service = MySQLRDBDataService(context=context)
     return data_service
 
