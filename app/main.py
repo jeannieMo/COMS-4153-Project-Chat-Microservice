@@ -2,12 +2,16 @@ from fastapi import FastAPI
 import uvicorn
 from app.routers import conversations
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+
 
 
 app = FastAPI()
 
+
 # Configure CORS
 app.add_middleware(
+    HTTPSRedirectMiddleware,
     CORSMiddleware,
     allow_origins=["*"],  # Your React app's URL
     allow_credentials=True,
