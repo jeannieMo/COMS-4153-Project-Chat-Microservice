@@ -8,8 +8,6 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 app = FastAPI()
 
-app.add_middleware(HTTPSRedirectMiddleware)
-
 
 # Configure CORS
 app.add_middleware(
