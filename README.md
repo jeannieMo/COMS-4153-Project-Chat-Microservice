@@ -1,8 +1,10 @@
 # COMS-4153-Project-Chat-Microservice
 
+The Chat Microservice allows students to communicate with one another via text messages. Below are the functionalities available.
+
 ## Create new conversation
 
-Send POST request to http://0.0.0.0:8000/conversations/ with JSON body
+Send POST request to /conversations/ with JSON body
 
 {
   "name": "Coding Workshop",
@@ -13,7 +15,7 @@ Send POST request to http://0.0.0.0:8000/conversations/ with JSON body
 
 ## Update conversation details
 
-Send PUT request to http://0.0.0.0:8000/conversations/{conversation_id} with JSON body
+Send PUT request to /conversations/{conversation_id} with JSON body
 
 {
   "name": "Coding Workshop",
@@ -24,8 +26,11 @@ Send PUT request to http://0.0.0.0:8000/conversations/{conversation_id} with JSO
 
 ## Get converstaion details
 
-Send GET request to http://0.0.0.0:8000/conversations/{conversation_id}
+Send GET request to /conversations/{conversation_id}
 
+## DELETE converstaion details
+
+Send DELETE request to /conversations/{conversation_id}
 
 ## Conversation database:
 
